@@ -18,16 +18,16 @@ const QuizPage = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [score, setScore] = useState(0);
 
-  if (!quiz) {
+  const question = quiz?.questions[currentIndex];
+  const isLast = quiz ? currentIndex === quiz.questions.length - 1 : false;
+
+  if (!quiz || !question) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p className="text-muted-foreground">Quiz-ul nu a fost găsit.</p>
       </div>
     );
   }
-
-  const question = quiz.questions[currentIndex];
-  const isLast = currentIndex === quiz.questions.length - 1;
 
   const handleSelect = (index: number) => {
     if (phase !== "question") return;
