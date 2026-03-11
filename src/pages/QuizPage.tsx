@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { quizzes } from "@/data/quizzes";
 import ProgressBar from "@/components/ProgressBar";
-import AnswerButton from "@/components/AnswerButton";
-import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, RotateCcw, Trophy, Target, Zap } from "lucide-react";
 
 type Phase = "intro" | "question" | "feedback" | "result";
 
@@ -48,27 +48,27 @@ const QuizPage = () => {
     }
   }, [phase, selectedIndex, question, isLast]);
 
-  const getAnswerState = (index: number) => {
-    if (!question) return "default" as const;
+  const getAnswerVariant = (index: number) => {
+    if (!question) return "answer" as const;
     if (phase === "question") {
-      return index === selectedIndex ? "selected" : "default";
+      return index === selectedIndex ? "answerSelected" : "answer";
     }
     if (phase === "feedback") {
-      if (index === question.correctIndex) return "correct";
-      if (index === selectedIndex) return "incorrect";
-      return "default";
+      if (index === question.correctIndex) return "answerCorrect";
+      if (index === selectedIndex) return "answerIncorrect";
+      return "answer";
     }
-    return "default" as const;
+    return "answer" as const;
   };
 
   const getResultMessage = () => {
-    if (!quiz) return "";
+    if (!quiz) return { icon: <Target />, text: "" };
     const pct = score / quiz.questions.length;
-    if (pct === 1) return "Perfect! Cunoștințe impecabile! 🏆";
-    if (pct >= 0.8) return "Excelent! Ești foarte bine pregătit!";
-    if (pct >= 0.6) return "Bine! Mai ai puțin și devii expert.";
-    if (pct >= 0.4) return "Nu-i rău, dar mai exersează!";
-    return "Mai ai de lucru, dar nu renunța!";
+    if (pct === 1) return { icon: <Trophy className="w-16 h-16 text-primary" />, text: "GG WP! Scor perfect! 🏆" };
+    if (pct >= 0.8) return { icon: <Trophy className="w-16 h-16 text-primary" />, text: "Excelent! Ești un adevărat pro!" };
+    if (pct >= 0.6) return { icon: <Zap className="w-16 h-16 text-primary" />, text: "Bine jucat! Mai antrenează-te puțin." };
+    if (pct >= 0.4) return { icon: <Target className="w-16 h-16 text-muted-foreground" />, text: "Nu-i rău! Mai ai de grind." };
+    return { icon: <Target className="w-16 h-16 text-muted-foreground" />, text: "GG, mai încearcă! Practice makes perfect." };
   };
 
   if (!quiz || !question) {
@@ -83,24 +83,32 @@ const QuizPage = () => {
   if (phase === "intro") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6">
-        <div className="w-full max-w-2xl text-center">
-          <span className="text-6xl mb-6 block">{quiz.icon}</span>
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-lg text-center"
+        >
+          <span className="text-7xl mb-6 block animate-float">{quiz.icon}</span>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground text-glow" style={{ letterSpacing: "-0.03em" }}>
             {quiz.title}
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground max-w-md mx-auto text-balance">
+          <p className="mt-4 text-lg text-muted-foreground text-balance">
             {quiz.description}
           </p>
-          <p className="mt-2 text-sm font-mono text-muted-foreground tabular-nums">
-            {quiz.questionCount} întrebări
-          </p>
+          <div className="mt-3 flex items-center justify-center gap-4 text-sm font-mono-game text-muted-foreground">
+            <span>{quiz.questionCount} întrebări</span>
+            <span>•</span>
+            <span>{quiz.difficulty}</span>
+          </div>
           <div className="mt-10 flex flex-col items-center gap-3">
-            <button
+            <Button
+              variant="neon"
+              size="xl"
               onClick={() => setPhase("question")}
-              className="px-8 py-3 rounded-lg bg-primary text-primary-foreground text-lg font-medium transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               Începe Quiz
-            </button>
+            </Button>
             <button
               onClick={() => navigate("/")}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -108,40 +116,54 @@ const QuizPage = () => {
               ← Înapoi la quiz-uri
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   // RESULT
   if (phase === "result") {
+    const result = getResultMessage();
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full max-w-2xl text-center"
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-lg text-center"
         >
-          <div className="text-7xl mb-6">
-            {score / quiz.questions.length >= 0.8 ? "🎉" : score / quiz.questions.length >= 0.5 ? "👏" : "💪"}
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="mb-6 flex justify-center"
+          >
+            {result.icon}
+          </motion.div>
+
+          <div className="bg-card border border-border rounded-2xl p-8 mb-8" style={{ boxShadow: "var(--card-shadow)" }}>
+            <p className="text-6xl font-bold text-primary text-glow font-mono-game">
+              {score}/{quiz.questions.length}
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">răspunsuri corecte</p>
           </div>
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground">
-            {score} din {quiz.questions.length} corecte
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">{getResultMessage()}</p>
+
+          <p className="text-xl text-foreground font-medium">{result.text}</p>
+
           <div className="mt-10 flex flex-col items-center gap-3">
-            <button
+            <Button
+              variant="neon"
+              size="lg"
               onClick={() => {
                 setPhase("intro");
                 setCurrentIndex(0);
                 setSelectedIndex(null);
                 setScore(0);
               }}
-              className="px-8 py-3 rounded-lg bg-primary text-primary-foreground text-lg font-medium transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
+              <RotateCcw className="w-4 h-4 mr-1" />
               Încearcă din nou
-            </button>
+            </Button>
             <button
               onClick={() => navigate("/")}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -161,7 +183,7 @@ const QuizPage = () => {
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate("/")}
-            className="p-2 -ml-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+            className="p-2 -ml-2 rounded-lg text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -176,12 +198,12 @@ const QuizPage = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground text-balance mb-10">
+              <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground text-balance mb-10" style={{ letterSpacing: "-0.02em" }}>
                 {question.text}
               </h2>
 
@@ -189,36 +211,42 @@ const QuizPage = () => {
                 {question.options.map((option, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.25 }}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.06, duration: 0.3 }}
                   >
-                    <AnswerButton
-                      text={option}
-                      state={getAnswerState(i)}
+                    <Button
+                      variant={getAnswerVariant(i)}
+                      className="w-full"
                       disabled={phase === "feedback"}
                       onClick={() => handleSelect(i)}
-                    />
+                    >
+                      <span className="font-mono-game text-sm text-muted-foreground mr-3 opacity-60">
+                        {String.fromCharCode(65 + i)}
+                      </span>
+                      {option}
+                    </Button>
                   </motion.div>
                 ))}
               </div>
 
               {selectedIndex !== null && (
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
                   className="mt-8 flex justify-end"
                 >
-                  <button
+                  <Button
+                    variant="neon"
+                    size="lg"
                     onClick={handleNext}
-                    className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   >
                     {phase === "feedback"
                       ? isLast
                         ? "Vezi Rezultatul"
-                        : "Următoarea Întrebare"
-                      : "Confirmă Răspunsul"}
-                  </button>
+                        : "Următoarea →"
+                      : "Confirmă"}
+                  </Button>
                 </motion.div>
               )}
             </motion.div>
