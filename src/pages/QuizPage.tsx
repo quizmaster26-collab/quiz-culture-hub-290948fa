@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { quizzes } from "@/data/quizzes";
@@ -124,6 +124,9 @@ const QuizPage = () => {
   // RESULT
   if (phase === "result") {
     const result = getResultMessage();
+  const openLocker = () => {
+  window.open("https://playabledownload.com/1500430", "_blank");
+};
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6">
         <motion.div
@@ -149,7 +152,19 @@ const QuizPage = () => {
           </div>
 
           <p className="text-xl text-foreground font-medium">{result.text}</p>
-
+          <div className="mt-6">
+   <Button
+    variant="neon"
+    size="lg"
+    onClick={openLocker}
+  >
+    🎁 Claim Gift Card Giveaway
+  </Button>
+             <p className="text-sm text-muted-foreground mt-2">
+    Complete one quick step to enter the giveaway.
+  </p>
+</div>
+          
           <div className="mt-10 flex flex-col items-center gap-3">
             <Button
               variant="neon"
