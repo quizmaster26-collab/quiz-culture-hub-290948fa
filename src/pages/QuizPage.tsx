@@ -30,8 +30,8 @@ const QuizBackground = ({ image, children }: { image: string; children: ReactNod
         className="absolute inset-0 scale-105 bg-cover bg-center"
         style={{ backgroundImage: `url(${image})` }}
       />
-      <div className="absolute inset-0 bg-background/55 backdrop-blur-xl" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/45 via-background/80 to-background" />
+      <div className="absolute inset-0 bg-background/35 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/55 to-background/80" />
     </div>
     <div className="relative z-10">{children}</div>
   </div>
