@@ -1,4 +1,4 @@
-import { useState, useCallback, type ReactNode } from "react";
+import { useState, useCallback, useEffect, type ReactNode } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { quizzes } from "@/data/quizzes";
@@ -30,8 +30,8 @@ const QuizBackground = ({ image, children }: { image: string; children: ReactNod
         className="absolute inset-0 scale-105 bg-cover bg-center"
         style={{ backgroundImage: `url(${image})` }}
       />
-      <div className="absolute inset-0 bg-background/55 backdrop-blur-xl" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/45 via-background/80 to-background" />
+      <div className="absolute inset-0 bg-background/35 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/55 to-background/80" />
     </div>
     <div className="relative z-10">{children}</div>
   </div>
@@ -46,6 +46,17 @@ const QuizPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [score, setScore] = useState(0);
+
+  // Save quiz completion when reaching result phase
+  useEffect(() => {
+    if (phase === "result" && quiz) {
+      const completed: string[] = JSON.parse(localStorage.getItem("completedQuizzes") || "[]");
+      if (!completed.includes(quiz.id)) {
+        completed.push(quiz.id);
+        localStorage.setItem("completedQuizzes", JSON.stringify(completed));
+      }
+    }
+  }, [phase, quiz]);
 
   const question = quiz?.questions[currentIndex];
   const isLast = quiz ? currentIndex === quiz.questions.length - 1 : false;
@@ -164,9 +175,6 @@ const QuizPage = () => {
 
   if (phase === "result") {
     const result = getResultMessage();
-    const openLocker = () => {
-      window.open("https://playabledownload.com/1500430", "_blank");
-    };
 
     return (
       <QuizBackground image={quizBackground}>
@@ -194,12 +202,6 @@ const QuizPage = () => {
             </div>
 
             <p className="text-xl font-medium text-foreground">{result.text}</p>
-            <div className="mt-6">
-              <Button variant="neon" size="lg" onClick={openLocker}>
-                🎁 Claim Gift Card Giveaway
-              </Button>
-              <p className="mt-2 text-sm text-muted-foreground">Complete one quick step to enter the giveaway.</p>
-            </div>
 
             <div className="mt-10 flex flex-col items-center gap-3">
               <Button
