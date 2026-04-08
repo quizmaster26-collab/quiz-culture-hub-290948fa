@@ -7,6 +7,23 @@ import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const Index = () => {
+  const [hasCompleted, setHasCompleted] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+
+  useEffect(() => {
+    const completed: string[] = JSON.parse(localStorage.getItem("completedQuizzes") || "[]");
+    setHasCompleted(completed.length > 0);
+  }, []);
+
+  const handleGiveaway = () => {
+    if (hasCompleted) {
+      window.open("https://contentfile.online/cl/i/4orqp1", "_blank");
+    } else {
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 4000);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
