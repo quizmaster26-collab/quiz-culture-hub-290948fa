@@ -47,6 +47,17 @@ const QuizPage = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [score, setScore] = useState(0);
 
+  // Save quiz completion when reaching result phase
+  useEffect(() => {
+    if (phase === "result" && quiz) {
+      const completed: string[] = JSON.parse(localStorage.getItem("completedQuizzes") || "[]");
+      if (!completed.includes(quiz.id)) {
+        completed.push(quiz.id);
+        localStorage.setItem("completedQuizzes", JSON.stringify(completed));
+      }
+    }
+  }, [phase, quiz]);
+
   const question = quiz?.questions[currentIndex];
   const isLast = quiz ? currentIndex === quiz.questions.length - 1 : false;
   const quizBackground = quiz ? quizBackgrounds[quiz.id] ?? gamingBg : gamingBg;
