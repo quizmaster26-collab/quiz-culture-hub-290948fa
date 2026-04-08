@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { quizzes } from "@/data/quizzes";
 import QuizCard from "@/components/QuizCard";
-import { motion } from "framer-motion";
-import { Gamepad2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Gamepad2, Gift, Lock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const Index = () => {
