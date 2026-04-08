@@ -23,7 +23,7 @@ const QuizCard = ({ quiz, index }: QuizCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
       onClick={() => navigate(`/quiz/${quiz.id}`)}
-      className="group w-full text-left bg-card rounded-xl p-6 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background border border-border hover:border-primary/30"
+      className="group w-full text-left bg-card rounded-xl p-6 transition-all duration-300 overflow-hidden min-h-[120px] flex items-center focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background border border-border hover:border-primary/30"
       style={{ boxShadow: "var(--card-shadow)" }}
       onMouseEnter={(e) => {
         e.currentTarget.style.boxShadow = "var(--card-shadow-hover)";
@@ -33,7 +33,7 @@ const QuizCard = ({ quiz, index }: QuizCardProps) => {
       }}
     >
       <div className="flex items-start gap-4 overflow-hidden">
-       <span className="text-2xl flex-shrink-0 leading-none">
+       <span className="text-2xl flex-shrink-0 leading-none mt-1">
        {quiz.icon}
        </span>
         <div className="flex-1 min-w-0">
@@ -45,7 +45,7 @@ const QuizCard = ({ quiz, index }: QuizCardProps) => {
               {quiz.difficulty}
             </Badge>
           </div>
-          <p className="text-muted-foreground text-sm leading-relaxed">
+          <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
             {quiz.description}
           </p>
           <p className="mt-3 text-xs font-mono-game text-muted-foreground tabular-nums">
