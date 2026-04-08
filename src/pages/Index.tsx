@@ -81,6 +81,53 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Giveaway Section */}
+      <section className="px-6 pb-16">
+        <div className="w-full max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="relative flex flex-col items-center gap-4"
+          >
+            <Button
+              variant="neon"
+              size="xl"
+              onClick={handleGiveaway}
+              className={!hasCompleted ? "opacity-60 cursor-not-allowed" : ""}
+            >
+              {hasCompleted ? (
+                <Gift className="mr-2 h-5 w-5" />
+              ) : (
+                <Lock className="mr-2 h-5 w-5" />
+              )}
+              🎁 Participă la Giveaway
+            </Button>
+
+            {!hasCompleted && (
+              <p className="text-xs text-muted-foreground font-mono-game">
+                Completează un quiz pentru a debloca
+              </p>
+            )}
+
+            <AnimatePresence>
+              {showMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="absolute -bottom-20 rounded-xl border border-primary/30 bg-card/90 backdrop-blur-sm px-6 py-4 text-sm text-foreground"
+                  style={{ boxShadow: "var(--neon-glow)" }}
+                >
+                  Pentru a participa la giveaway va trebui să completezi cel puțin un quiz ✨
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="mt-auto py-8 text-center">
         <p className="text-xs text-muted-foreground font-mono-game">
