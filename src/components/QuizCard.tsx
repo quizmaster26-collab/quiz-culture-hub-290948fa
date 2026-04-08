@@ -32,11 +32,13 @@ const QuizCard = ({ quiz, index }: QuizCardProps) => {
         e.currentTarget.style.boxShadow = "var(--card-shadow)";
       }}
     >
-      <div className="flex items-start gap-4">
-        <span className="text-4xl group-hover:animate-float transition-transform">{quiz.icon}</span>
+      <div className="flex items-start gap-4 overflow-hidden">
+       <span className="text-2xl flex-shrink-0 leading-none">
+       {quiz.icon}
+       </span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 mb-1">
-            <h2 className="text-lg font-semibold text-card-foreground tracking-tight group-hover:text-primary transition-colors">
+            <h2 className="text-lg font-semibold text-card-foreground tracking-tight group-hover:text-primary transition-colors truncate">
               {quiz.title}
             </h2>
             <Badge variant="outline" className={difficultyColors[quiz.difficulty]}>
