@@ -8,7 +8,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+     <section className="relative">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroBg})` }}
@@ -52,7 +52,7 @@ const Index = () => {
       </section>
 
       {/* Quiz Grid */}
-      <section className="px-6 -mt-12 pb-20">
+     <section className="px-6 -mt-8 pb-20">
         <div className="w-full max-w-3xl mx-auto">
           <div className="grid gap-4 sm:grid-cols-2">
             {quizzes.map((quiz, i) => (
