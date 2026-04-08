@@ -164,9 +164,15 @@ const QuizPage = () => {
 
   if (phase === "result") {
     const result = getResultMessage();
-    const openLocker = () => {
-      window.open("https://playabledownload.com/1500430", "_blank");
-    };
+
+    // Save completion to localStorage
+    useEffect(() => {
+      const completed = JSON.parse(localStorage.getItem("completedQuizzes") || "[]");
+      if (!completed.includes(quiz.id)) {
+        completed.push(quiz.id);
+        localStorage.setItem("completedQuizzes", JSON.stringify(completed));
+      }
+    }, []);
 
     return (
       <QuizBackground image={quizBackground}>
