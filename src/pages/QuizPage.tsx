@@ -176,15 +176,6 @@ const QuizPage = () => {
   if (phase === "result") {
     const result = getResultMessage();
 
-    // Save completion to localStorage
-    useEffect(() => {
-      const completed = JSON.parse(localStorage.getItem("completedQuizzes") || "[]");
-      if (!completed.includes(quiz.id)) {
-        completed.push(quiz.id);
-        localStorage.setItem("completedQuizzes", JSON.stringify(completed));
-      }
-    }, []);
-
     return (
       <QuizBackground image={quizBackground}>
         <div className="flex min-h-screen flex-col items-center justify-center px-6">
@@ -211,12 +202,6 @@ const QuizPage = () => {
             </div>
 
             <p className="text-xl font-medium text-foreground">{result.text}</p>
-            <div className="mt-6">
-              <Button variant="neon" size="lg" onClick={openLocker}>
-                🎁 Claim Gift Card Giveaway
-              </Button>
-              <p className="mt-2 text-sm text-muted-foreground">Complete one quick step to enter the giveaway.</p>
-            </div>
 
             <div className="mt-10 flex flex-col items-center gap-3">
               <Button
