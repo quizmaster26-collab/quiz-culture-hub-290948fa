@@ -52,7 +52,7 @@ const Index = () => {
       </section>
 
       {/* Quiz Grid */}
-     <section className="px-6 -mt-4 pb-20">
+     <section className="px-6 -mt-2 pb-20">
         <div className="w-full max-w-3xl mx-auto">
           <div className="grid gap-4 sm:grid-cols-2">
             {quizzes.map((quiz, i) => (
