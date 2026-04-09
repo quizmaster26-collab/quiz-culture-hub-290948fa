@@ -6,12 +6,37 @@ import { Gamepad2, Gift, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
+// 🔄 SCHIMBĂ ACEST NUMĂR CÂND VREI UN NOU GIVEAWAY (ex: 2, 3, 4...)
+const GIVEAWAY_VERSION = 1;
+
+const getCompletedQuizzes = (): string[] => {
+  const data = JSON.parse(localStorage.getItem("completedQuizzes") || "{}");
+  // Migration: old format was an array
+  if (Array.isArray(data)) {
+    localStorage.removeItem("completedQuizzes");
+    return [];
+  }
+  if (data.version !== GIVEAWAY_VERSION) {
+    localStorage.setItem("completedQuizzes", JSON.stringify({ version: GIVEAWAY_VERSION, ids: [] }));
+    return [];
+  }
+  return data.ids || [];
+};
+
+export const saveCompletedQuiz = (quizId: string) => {
+  const ids = getCompletedQuizzes();
+  if (!ids.includes(quizId)) {
+    ids.push(quizId);
+    localStorage.setItem("completedQuizzes", JSON.stringify({ version: GIVEAWAY_VERSION, ids }));
+  }
+};
+
 const Index = () => {
   const [hasCompleted, setHasCompleted] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
-    const completed: string[] = JSON.parse(localStorage.getItem("completedQuizzes") || "[]");
+    const completed = getCompletedQuizzes();
     setHasCompleted(completed.length > 0);
   }, []);
 
@@ -90,19 +115,25 @@ const Index = () => {
             transition={{ delay: 0.5, duration: 0.5 }}
             className="relative flex flex-col items-center gap-4"
           >
-            <Button
-              variant="neon"
-              size="xl"
+            <button
               onClick={handleGiveaway}
-              className={!hasCompleted ? "opacity-60 cursor-not-allowed" : ""}
+              className={`
+                group relative inline-flex items-center gap-3 rounded-xl px-10 py-5 text-lg font-bold
+                bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%]
+                text-primary-foreground
+                transition-all duration-300
+                hover:shadow-[var(--neon-glow-strong)] hover:scale-[1.03] active:scale-[0.97]
+                animate-[shimmer_3s_linear_infinite]
+                ${!hasCompleted ? "opacity-50 cursor-not-allowed saturate-50" : ""}
+              `}
             >
               {hasCompleted ? (
-                <Gift className="mr-2 h-5 w-5" />
+                <Gift className="h-6 w-6" />
               ) : (
-                <Lock className="mr-2 h-5 w-5" />
+                <Lock className="h-6 w-6" />
               )}
               🎁 Participă la Giveaway
-            </Button>
+            </button>
 
             {!hasCompleted && (
               <p className="text-xs text-muted-foreground font-mono-game">
