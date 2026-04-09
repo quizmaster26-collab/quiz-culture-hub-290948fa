@@ -50,8 +50,7 @@ const QuizPage = () => {
   // Save quiz completion when reaching result phase
   useEffect(() => {
     if (phase === "result" && quiz) {
-      const { saveCompletedQuiz } = await import("@/pages/Index");
-      saveCompletedQuiz(quiz.id);
+      import("@/pages/Index").then(({ saveCompletedQuiz }) => saveCompletedQuiz(quiz.id));
     }
   }, [phase, quiz]);
 
