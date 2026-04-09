@@ -33,6 +33,9 @@
     --destructive: 0 84% 55%;
     --destructive-foreground: 0 0% 100%;
 
+    --giveaway: 152 60% 28%;
+    --giveaway-foreground: 150 20% 95%;
+
     --border: 230 20% 18%;
     --input: 230 20% 18%;
     --ring: 185 100% 50%;
@@ -41,6 +44,7 @@
 
     --neon-glow: 0 0 20px hsl(185 100% 50% / 0.3), 0 0 60px hsl(185 100% 50% / 0.1);
     --neon-glow-strong: 0 0 20px hsl(185 100% 50% / 0.5), 0 0 60px hsl(185 100% 50% / 0.2), 0 0 100px hsl(185 100% 50% / 0.1);
+    --giveaway-glow: 0 0 20px hsl(152 60% 28% / 0.4), 0 0 60px hsl(152 60% 28% / 0.15);
     --card-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 1px hsl(230 20% 18%);
     --card-shadow-hover: 0 8px 30px rgba(0,0,0,0.5), 0 0 0 1px hsl(185 100% 50% / 0.3), 0 0 30px hsl(185 100% 50% / 0.1);
 
