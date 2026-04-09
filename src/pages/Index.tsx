@@ -9,7 +9,7 @@ import heroBg from "@/assets/hero-bg.jpg";
 const GIVEAWAY_VERSION = 1;
 
 // 📅 DATA CÂND SE TERMINĂ GIVEAWAY-UL (schimbă când lansezi un giveaway nou)
-const GIVEAWAY_END = new Date("2025-04-16T23:59:59");
+const GIVEAWAY_END = new Date("2026-04-16T23:59:59");
 
 const getCompletedQuizzes = (): string[] => {
   const data = JSON.parse(localStorage.getItem("completedQuizzes") || "{}");
